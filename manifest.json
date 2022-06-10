@@ -1,0 +1,16 @@
+{
+  "name": "Seiyon",
+  "description": "Ban User",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "content_scripts" : [
+    {
+      "js" : ["ban.js"],
+      "matches" : ["*://www.seiyon.net/*"]
+    }
+	]
+}
