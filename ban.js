@@ -71,14 +71,15 @@ function handleButtonClick(date, id) {
         if (confirm(id + '를 차단하시겠습니까?')) {
             pushBlockItem(date, id)
             alert('차단했습니다.')
+            window.location.reload()
         }
     } else {
         if (confirm(id  + '를 차단 해제하시겠습니까?')) {
             popBanId(date, id, index)
             alert('차단 해제했습니다.')
+            window.location.reload()
         }
     }
-    window.location.reload()
 }
 
 
