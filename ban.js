@@ -1,14 +1,14 @@
 const board = window.location.pathname.split('/')[2]
 const BAN_STYLE = 'background-color:#ff0000'
-let ban_dict = {}
+let banDict = {}
 
 load()
 
 function load() {
     // chrome.storage.sync.clear()
-    chrome.storage.sync.get('seiyon_ban_list', ({seiyon_ban_list}) => {
-        if (seiyon_ban_list) {
-            ban_dict = seiyon_ban_list
+    chrome.storage.sync.get('seiyonBanList', ({seiyonBanList}) => {
+        if (seiyonBanList) {
+            banDict = seiyonBanList
         }
         changePostList()
         if (window.location.pathname.split('/')[3].startsWith('+')) {
@@ -30,11 +30,11 @@ function changePostList() {
             username.style = 'cursor: pointer'
             username.addEventListener('click', function(){handleButtonClick(date, username.title)})
     
-            // console.log(ban_dict)
+            // console.log(banDict)
             if (
-                ban_dict
-                && checkNested(ban_dict, board, date)
-                && ban_dict[board][date].includes(username.title)
+                banDict
+                && checkNested(banDict, board, date)
+                && banDict[board][date].includes(username.title)
             ) {
                 post.style = BAN_STYLE
             }
@@ -53,9 +53,9 @@ function changeCommentList() {
         commentName.style = 'cursor: pointer'
         commentName.addEventListener('click', function(){handleButtonClick(postTime, commentId)})
         if (
-            ban_dict
-            && checkNested(ban_dict, board, postTime)
-            && ban_dict[board][postTime].includes(commentId)
+            banDict
+            && checkNested(banDict, board, postTime)
+            && banDict[board][postTime].includes(commentId)
         ) {
             comment.style = BAN_STYLE
         }
@@ -65,8 +65,8 @@ function changeCommentList() {
 
 function handleButtonClick(date, id) {
     if (
-        !checkNested(ban_dict, board, date)
-        || (index = ban_dict[board][date].indexOf(id)) === -1
+        !checkNested(banDict, board, date)
+        || (index = banDict[board][date].indexOf(id)) === -1
     ) {
         if (confirm(id + '를 차단하시겠습니까?')) {
             pushBlockItem(date, id)
@@ -89,10 +89,10 @@ function handleButtonClick(date, id) {
  * @param {number} [index] 인덱스
  */
 function popBanId(date, id, index) {
-    ban_dict[board][date].splice(index || ban_dict[board][date].indexOf(id), 1)
+    banDict[board][date].splice(index || banDict[board][date].indexOf(id), 1)
 
-    if(ban_dict[board][date].length == 0) {
-        delete ban_dict[board][date]
+    if(banDict[board][date].length == 0) {
+        delete banDict[board][date]
     }
     saveBanDict()
 }
@@ -104,17 +104,17 @@ function popBanId(date, id, index) {
  * @param {string} id 추가할 아이디
  */
 function pushBlockItem(date, id) {
-    if (typeof ban_dict[board] == 'undefined' || ban_dict[board] == null) {
+    if (typeof banDict[board] == 'undefined' || banDict[board] == null) {
         // console.log(board + ' ban list 생성')
-        ban_dict[board] = {} // 새로운 dict
+        banDict[board] = {} // 새로운 dict
     }
 
-    if (typeof ban_dict[board][date] == 'undefined' || ban_dict[board][date] == null) {
+    if (typeof banDict[board][date] == 'undefined' || banDict[board][date] == null) {
         // console.log(board + ' ' + date + ' ban list 생성')
-        ban_dict[board][date] = new Array() // 새로운 array
+        banDict[board][date] = new Array() // 새로운 array
     }
 
-    ban_dict[board][date].push(id)
+    banDict[board][date].push(id)
 
     saveBanDict()
 }
@@ -128,6 +128,6 @@ function checkNested(obj, level,  ...rest) {
 
 
 function saveBanDict() {
-    console.log(ban_dict)
-    chrome.storage.sync.set({'seiyon_ban_list': ban_dict})
+    console.log(banDict)
+    chrome.storage.sync.set({'seiyonBanList': banDict})
 }
