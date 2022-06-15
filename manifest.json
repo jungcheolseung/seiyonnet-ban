@@ -1,13 +1,13 @@
 {
   "name": "Seiyon",
   "description": "Ban User",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "manifest_version": 3,
   "permissions": ["storage", "activeTab", "scripting"],
   "content_scripts" : [
     {
       "js" : ["ban.js"],
-      "matches" : ["*://www.seiyon.net/*"]
+      "matches" : ["*://www.seiyon.net/board/*"]
     }
 	]
 }
